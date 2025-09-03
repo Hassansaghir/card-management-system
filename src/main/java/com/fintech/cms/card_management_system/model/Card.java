@@ -1,5 +1,6 @@
 package com.fintech.cms.card_management_system.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -18,6 +19,7 @@ public class Card {
 
     @ManyToOne
     @JoinColumn(name = "account_id")
+    @JsonBackReference
     private Account account;
 
     // Getters and setters

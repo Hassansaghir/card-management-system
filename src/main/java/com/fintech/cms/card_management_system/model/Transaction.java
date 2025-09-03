@@ -1,5 +1,6 @@
 package com.fintech.cms.card_management_system.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -17,12 +18,10 @@ public class Transaction {
     private LocalDateTime transactionDate;
     private String transactionType; // C = Credit, D = Debit
 
-    @ManyToOne
-    @JoinColumn(name = "account_id")
-    private Account account;
 
     @ManyToOne
     @JoinColumn(name = "card_id", nullable = true)
+    @JsonBackReference
     private Card card;
 
     // Getters and setters
@@ -34,8 +33,6 @@ public class Transaction {
     public void setTransactionDate(LocalDateTime transactionDate) { this.transactionDate = transactionDate; }
     public String getTransactionType() { return transactionType; }
     public void setTransactionType(String transactionType) { this.transactionType = transactionType; }
-    public Account getAccount() { return account; }
-    public void setAccount(Account account) { this.account = account; }
     public Card getCard() { return card; }
     public void setCard(Card card) { this.card = card; }
 }

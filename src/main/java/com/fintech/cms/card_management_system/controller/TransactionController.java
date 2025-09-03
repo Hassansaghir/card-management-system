@@ -18,16 +18,16 @@ public class TransactionController {
     private TransactionService transactionService;
 
     // Create transaction
-    @PostMapping("/{accountId}")
-    public Transaction createTransaction(@PathVariable UUID accountId,
+    @PostMapping("/{cardId}")
+    public Transaction createTransaction(@PathVariable UUID cardId,
                                          @RequestBody CreateTransactionRequest request) {
         Transaction transaction = new Transaction();
         transaction.setTransactionAmount(request.getTransactionAmount());
         transaction.setTransactionType(request.getTransactionType());
 
-        UUID cardId = request.getCardId() != null ? UUID.fromString(request.getCardId()) : null;
-        return transactionService.createTransaction(transaction, accountId, cardId);
+        return transactionService.createTransaction(transaction, cardId);
     }
+
 
     // Get all transactions
     @GetMapping

@@ -1,5 +1,6 @@
 package com.fintech.cms.card_management_system.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,10 +18,8 @@ public class Account {
     private BigDecimal balance;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Card> cards;
-
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
-    private List<Transaction> transactions;
 
     // Getters and setters
     public UUID getId() { return id; }
@@ -31,6 +30,4 @@ public class Account {
     public void setBalance(BigDecimal balance) { this.balance = balance; }
     public List<Card> getCards() { return cards; }
     public void setCards(List<Card> cards) { this.cards = cards; }
-    public List<Transaction> getTransactions() { return transactions; }
-    public void setTransactions(List<Transaction> transactions) { this.transactions = transactions; }
 }

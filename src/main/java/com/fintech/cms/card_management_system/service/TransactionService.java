@@ -28,50 +28,44 @@ public class TransactionService {
     @Autowired
     private CardRepository cardRepository;
 
-    public Transaction createTransaction(Transaction transaction, UUID accountId, UUID cardId) {
-        // Fetch account or throw ResourceNotFoundException
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new ResourceNotFoundException("Account not found"));
+    public Transaction createTransaction(Transaction transaction, UUID cardId) {
+        Card card = cardRepository.findById(cardId)
+                .orElseThrow(() -> new ResourceNotFoundException("Card not found"));
 
-        Card card = null;
-        if (cardId != null) {
-            card = cardRepository.findById(cardId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Card not found"));
-
-            // Validate card
-            if (!"ACTIVE".equalsIgnoreCase(card.getStatus()) ||
-                    card.getExpiry().isBefore(LocalDateTime.now().toLocalDate())) {
-                throw new InvalidOperationException("Card is invalid or expired");
-            }
+        if (!"ACTIVE".equalsIgnoreCase(card.getStatus()) ||
+                card.getExpiry().isBefore(LocalDateTime.now().toLocalDate())) {
+            throw new InvalidOperationException("Card is invalid or expired");
         }
 
-        // Validate account status
+        Account account = card.getAccount();
+        if (account == null) {
+            throw new InvalidOperationException("Card is not linked to an account");
+        }
+
         if (!"ACTIVE".equalsIgnoreCase(account.getStatus())) {
             throw new InvalidOperationException("Account is inactive");
         }
 
         BigDecimal amount = transaction.getTransactionAmount();
 
-        // Process transaction
-        if ("D".equalsIgnoreCase(transaction.getTransactionType())) { // Debit
+        if ("D".equalsIgnoreCase(transaction.getTransactionType())) {
             if (account.getBalance().compareTo(amount) < 0) {
                 throw new InvalidOperationException("Insufficient balance");
             }
             account.setBalance(account.getBalance().subtract(amount));
-        } else if ("C".equalsIgnoreCase(transaction.getTransactionType())) { // Credit
+        } else if ("C".equalsIgnoreCase(transaction.getTransactionType())) {
             account.setBalance(account.getBalance().add(amount));
         } else {
             throw new InvalidOperationException("Invalid transaction type");
         }
 
-        // Update account and save transaction
         accountRepository.save(account);
-        transaction.setAccount(account);
         transaction.setCard(card);
         transaction.setTransactionDate(LocalDateTime.now());
 
         return transactionRepository.save(transaction);
     }
+
 
     public List<Transaction> getAllTransactions() {
         return transactionRepository.findAll();
