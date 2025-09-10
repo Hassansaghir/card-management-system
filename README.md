@@ -1,1 +1,38 @@
-🏦 Card Management System (CMS) A Spring Boot application that manages bank accounts and cards. This project demonstrates Spring Boot, JPA, DTOs, REST APIs, and database integration for a fintech-style system. 🚀 Features Account Management Create, update, delete, and view accounts Track account balance and status Card Management Create and link cards to accounts Manage card details (number, expiry, etc.) View all cards associated with an account Transaction Handling (future feature) Log and track transactions between accounts REST API Endpoints JSON-based data exchange DTOs for request/response payloads Validation for request inputs 🛠
+# 💳 Card Management System (CMS)
+
+A Spring Boot–based **Card Management System** that manages accounts, cards, and transactions.  
+It provides RESTful APIs for creating and managing accounts, issuing cards, and recording transactions.  
+Built with **Spring Boot, Spring Data JPA, Hibernate, PostgreSQL/MySQL**, and **Spring Security**.
+
+---
+
+## 🚀 Features
+- Account management (create, update, fetch)
+- Card management (issue cards, fetch by card number, link to account)
+- Transaction management (create and fetch transactions per card)
+- DTO mapping using **ModelMapper**
+- Data validation with **Jakarta Validation**
+- Centralized exception handling
+- Logging with **SLF4J / Logback**
+- Secure endpoints with **Spring Security**
+
+---
+
+## 🛠️ Tech Stack
+- **Java 17+**
+- **Spring Boot 3+**
+- **Spring Web (REST API)**
+- **Spring Data JPA (Hibernate)**
+- **Spring Security**
+- **PostgreSQL/MySQL**
+- **ModelMapper**
+- **Maven**
+
+---
+
+## ⚙️ Installation & Setup
+
+### 1️⃣ Clone the repository
+```bash
+git clone https://github.com/your-username/card-management-system.git
+cd card-management-system
