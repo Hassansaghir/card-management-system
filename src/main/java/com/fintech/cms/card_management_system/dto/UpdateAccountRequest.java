@@ -13,4 +13,5 @@ public class UpdateAccountRequest {
     @NotNull(message = "Status is required")
     private Status status;
 
+    private BigDecimal balance;
 }

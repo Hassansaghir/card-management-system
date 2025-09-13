@@ -1,5 +1,6 @@
 package com.fintech.cms.card_management_system.controller;
 
+import com.fintech.cms.card_management_system.dto.CardActivation;
 import com.fintech.cms.card_management_system.dto.CardDto;
 import com.fintech.cms.card_management_system.dto.CreateCardRequest;
 import com.fintech.cms.card_management_system.model.Card;
@@ -32,8 +33,10 @@ public class CardController {
     public ResponseEntity<CreateCardRequest> createCard(@Valid @RequestBody CreateCardRequest request,
                                                         @PathVariable UUID accountId) {
         Card savedCard = cardService.createCard(request, accountId);
+        CreateCardRequest cardRequest = modelMapper.map(savedCard,CreateCardRequest.class);
+        cardRequest.setAccount_id(request.getAccount_id());
         log.info("Created card with id {} for account {}", savedCard.getId(), accountId);
-        return ResponseEntity.ok(modelMapper.map(savedCard,CreateCardRequest.class));
+        return ResponseEntity.ok(cardRequest);
     }
     @GetMapping
     public ResponseEntity<List<CardDto>> getAllCards() {
@@ -63,18 +66,22 @@ public class CardController {
     }
 
     // Activate card
-    @PutMapping("/{id}/activate")
-    public ResponseEntity<CreateCardRequest> activateCard(@PathVariable UUID id) {
-        Card card = cardService.activateCard(id);
-        log.info("Activated card with id {}", id);
-        return ResponseEntity.ok(modelMapper.map(card,CreateCardRequest.class));
+    @PutMapping("/{isbn}/activate")
+    public ResponseEntity<CardActivation> activateCard(@PathVariable String isbn) {
+        Card card = cardService.activateCard(isbn);
+        CardActivation cardActivation=modelMapper.map(card,CardActivation.class);
+        cardActivation.setAccount_id(card.getAccount().getId());
+        log.info("Activated card with isbn {}", isbn);
+        return ResponseEntity.ok(cardActivation);
     }
 
     // Deactivate card
-    @PutMapping("/{id}/deactivate")
-    public ResponseEntity<CreateCardRequest> deactivateCard(@PathVariable UUID id) {
-        Card card = cardService.deactivateCard(id);
-        log.info("Deactivated card with id {}", id);
-        return ResponseEntity.ok(modelMapper.map(card,CreateCardRequest.class));
+    @PutMapping("/{isbn}/deactivate")
+    public ResponseEntity<CardActivation> deactivateCard(@PathVariable String isbn) {
+        Card card = cardService.deactivateCard(isbn);
+        CardActivation cardActivation=modelMapper.map(card,CardActivation.class);
+        cardActivation.setAccount_id(card.getAccount().getId());
+        log.info("DisActivated card with isbn {}", isbn);
+        return ResponseEntity.ok(cardActivation);
     }
 }

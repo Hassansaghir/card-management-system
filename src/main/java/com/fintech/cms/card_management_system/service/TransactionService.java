@@ -30,7 +30,7 @@ public class TransactionService {
     // Create a new transaction
     public Transaction createTransaction(CreateTransactionRequest request, String CardNumber) {
         Card card = cardRepository.findByCardNumber(CardNumber)
-                .orElseThrow(() -> new ResourceNotFoundException("Card not found with id: " + CardNumber));
+                .orElseThrow(() -> new ResourceNotFoundException("Card not found with Number: " + CardNumber));
 
         if (card.getStatus() != Status.Active || card.getExpiry().isBefore(LocalDateTime.now().toLocalDate())) {
             throw new InvalidOperationException("Card is invalid or expired");
@@ -65,8 +65,10 @@ public class TransactionService {
         log.info("Created {} transaction of {} for card {} and account {}",
                 type, amount, CardNumber, account.getId());
 
+
         return saved;
     }
+
 
     // Get all transactions
     public List<Transaction> getAllTransactions() {

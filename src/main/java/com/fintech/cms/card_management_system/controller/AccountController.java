@@ -89,8 +89,14 @@ public class AccountController {
 
         Account updated = accountService.updateAccountPartially(id, request);
         log.info("Patched account with id {}", id);
+        AccountDTO accountDTO = modelMapper.map(updated, AccountDTO.class);
+        List<CardDto> cardDtoList = new ArrayList<CardDto>();
+        for (int i = 0; i < accountDTO.getCards().size(); i++) {
+            cardDtoList.add(accountDTO.getCards().get(i));
+            cardDtoList.get(i).setAccount_id(updated.getId());
 
-        return ResponseEntity.ok(modelMapper.map(updated, AccountDTO.class));
+        }
+        return ResponseEntity.ok(accountDTO);
     }
 
 

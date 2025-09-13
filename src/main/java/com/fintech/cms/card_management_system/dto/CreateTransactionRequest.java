@@ -18,6 +18,5 @@ public class CreateTransactionRequest {
     @NotNull(message = "Transaction type is required")
     private Type transactionType; // CREDIT or DEBIT
 
-    @NotNull(message = "CardNumber is required")
     private String CardNumber;
 }

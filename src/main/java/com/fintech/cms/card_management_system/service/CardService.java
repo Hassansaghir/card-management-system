@@ -31,25 +31,25 @@ public class CardService {
 
         Card card = modelMapper.map(cardDto, Card.class);
         card.setAccount(account);
-        card.setStatus(Status.Active); // default status
+        card.setStatus(Status.Active);// default status
         Card saved = cardRepository.save(card);
         log.info("Created card with id {} for account {}", saved.getId(), account_Id);
         return saved;
     }
 
-    public Card activateCard(UUID cardId) {
-        Card card = getCardById(cardId);
+    public Card activateCard(String isbn) {
+        Card card = getCardByCardNumber(isbn);
         card.setStatus(Status.Active);
         Card updated = cardRepository.save(card);
-        log.info("Activated card with id {}", cardId);
+        log.info("Activated card with isbn {}", isbn);
         return updated;
     }
 
-    public Card deactivateCard(UUID cardId) {
-        Card card = getCardById(cardId);
+    public Card deactivateCard(String isbn) {
+        Card card = getCardByCardNumber(isbn);
         card.setStatus(Status.NonActive);
         Card updated = cardRepository.save(card);
-        log.info("Deactivated card with id {}", cardId);
+        log.info("Deactivated card with isbn {}", isbn);
         return updated;
     }
 
